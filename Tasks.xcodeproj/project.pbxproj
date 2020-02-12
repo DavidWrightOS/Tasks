@@ -66,17 +66,41 @@
 			children = (
 				0436AE7B23F39C08006AE2F0 /* AppDelegate.swift */,
 				0436AE7D23F39C08006AE2F0 /* SceneDelegate.swift */,
-				0436AE7F23F39C08006AE2F0 /* TaskDetailViewController.swift */,
-				0436AE9423F3AE4E006AE2F0 /* Task+Convenience.swift */,
-				0436AE9623F3B33A006AE2F0 /* TasksTableViewController.swift */,
-				0436AE8123F39C08006AE2F0 /* Main.storyboard */,
-				0436AE8F23F3A3D8006AE2F0 /* Tasks.xcdatamodeld */,
-				0436AE9223F3A568006AE2F0 /* CoreDataStack.swift */,
-				0436AE8423F39C0A006AE2F0 /* Assets.xcassets */,
-				0436AE8623F39C0A006AE2F0 /* LaunchScreen.storyboard */,
-				0436AE8923F39C0A006AE2F0 /* Info.plist */,
+				0436AE9823F3B801006AE2F0 /* Model */,
+				0436AE9A23F3B82F006AE2F0 /* Resources */,
+				0436AE9923F3B81B006AE2F0 /* View Controllers */,
 			);
 			path = Tasks;
+			sourceTree = "<group>";
+		};
+		0436AE9823F3B801006AE2F0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0436AE9223F3A568006AE2F0 /* CoreDataStack.swift */,
+				0436AE9423F3AE4E006AE2F0 /* Task+Convenience.swift */,
+				0436AE8F23F3A3D8006AE2F0 /* Tasks.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0436AE9923F3B81B006AE2F0 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0436AE7F23F39C08006AE2F0 /* TaskDetailViewController.swift */,
+				0436AE9623F3B33A006AE2F0 /* TasksTableViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		0436AE9A23F3B82F006AE2F0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0436AE8923F39C0A006AE2F0 /* Info.plist */,
+				0436AE8423F39C0A006AE2F0 /* Assets.xcassets */,
+				0436AE8623F39C0A006AE2F0 /* LaunchScreen.storyboard */,
+				0436AE8123F39C08006AE2F0 /* Main.storyboard */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
