@@ -32,6 +32,7 @@
 		0436AE9223F3A568006AE2F0 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		0436AE9423F3AE4E006AE2F0 /* Task+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Convenience.swift"; sourceTree = "<group>"; };
 		0436AE9623F3B33A006AE2F0 /* TasksTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableViewController.swift; sourceTree = "<group>"; };
+		63C01AEC23F6412B004D2C1A /* Tasks 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Tasks 2.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -326,7 +327,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MGKLTU8Z22;
-				INFOPLIST_FILE = Tasks/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tasks/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -344,7 +345,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MGKLTU8Z22;
-				INFOPLIST_FILE = Tasks/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tasks/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -383,9 +384,10 @@
 		0436AE8F23F3A3D8006AE2F0 /* Tasks.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				63C01AEC23F6412B004D2C1A /* Tasks 2.xcdatamodel */,
 				0436AE9023F3A3D8006AE2F0 /* Tasks.xcdatamodel */,
 			);
-			currentVersion = 0436AE9023F3A3D8006AE2F0 /* Tasks.xcdatamodel */;
+			currentVersion = 63C01AEC23F6412B004D2C1A /* Tasks 2.xcdatamodel */;
 			path = Tasks.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
