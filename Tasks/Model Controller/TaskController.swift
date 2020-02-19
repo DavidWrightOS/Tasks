@@ -48,7 +48,6 @@ class TaskController {
             
             do {
                 let taskRepresentations = Array(try JSONDecoder().decode([String : TaskRepresentation].self, from: data).values)
-                // Update tasks
                 try self.updateTasks(with: taskRepresentations)
                 DispatchQueue.main.async {
                     completion(nil)

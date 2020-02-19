@@ -92,15 +92,14 @@ class TasksTableViewController: UITableViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowTaskDetailSegue" {
-            guard let detailVC = segue.destination as? TaskDetailViewController else { return }
-            guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            
-            detailVC.task = fetchedResultsController.object(at: indexPath)
-        }
-        
         if let detailVC = segue.destination as? TaskDetailViewController {
+            // Dependency injection for creating new or updating existing task
             detailVC.taskController = taskController
+            if segue.identifier == "ShowTaskDetailSegue",
+                let indexPath = tableView.indexPathForSelectedRow {
+                // Dependency injection for updating existing task
+                detailVC.task = fetchedResultsController.object(at: indexPath)
+            }
         }
     }
 }
