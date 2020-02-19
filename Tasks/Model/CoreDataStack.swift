@@ -10,9 +10,9 @@ import Foundation
 import CoreData
 
 class CoreDataStack {
-    static let shared = CoreDataStack()
+    static let shared = CoreDataStack() // this is a "singleton"
     
-    private init() {}
+    //private init() {}
     
     lazy var container: NSPersistentContainer = {
         let newContainer = NSPersistentContainer(name: "Tasks")

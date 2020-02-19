@@ -7,6 +7,7 @@
         <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="category" inverseEntity="Task"/>
     </entity>
     <entity name="Task" representedClassName="Task" syncable="YES" codeGenerationType="class">
+        <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String" minValueString="1"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="priority" attributeType="String" defaultValueString="normal"/>
@@ -14,6 +15,6 @@
     </entity>
     <elements>
         <element name="Category" positionX="-510.59375" positionY="-149.3046875" width="128" height="103"/>
-        <element name="Task" positionX="-301.55859375" positionY="-55.35546875" width="128" height="103"/>
+        <element name="Task" positionX="-301.55859375" positionY="-55.35546875" width="128" height="118"/>
     </elements>
 </model>

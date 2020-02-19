@@ -11,25 +11,14 @@ import CoreData
 
 class TasksTableViewController: UITableViewController {
     
-    // WARNING! This is incredibly inefficient!!!
-//    var tasks: [Task] {
-//        let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
-//        let moc = CoreDataStack.shared.mainContext
-//
-//        do {
-//            return try moc.fetch(fetchRequest)
-//        } catch {
-//            print("Error fetching tasks: \(error)")
-//            return []
-//        }
-//    }
+    // MARK: - Properties
     
+    private let taskController = TaskController()
+
     lazy var fetchedResultsController: NSFetchedResultsController<Task> = {
         let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "priority", ascending: true),
-            NSSortDescriptor(key: "name", ascending: true)
-        ]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: true),
+                                        NSSortDescriptor(key: "name", ascending: true)]
         let moc = CoreDataStack.shared.mainContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
                                              managedObjectContext: moc,
@@ -40,16 +29,19 @@ class TasksTableViewController: UITableViewController {
         return frc
     }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
+    // MARK: - Lifecycle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
 
+    @IBAction func refresh(_ sender: UIRefreshControl) {
+        taskController.fetchTasksFromServer { (_) in
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -78,16 +70,23 @@ class TasksTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let task = fetchedResultsController.object(at: indexPath)
-            let moc = CoreDataStack.shared.mainContext
-            moc.delete(task)
             
-            do {
-                try moc.save()
-            } catch {
-                moc.reset()
-                print("Error saving deleted task: \(error)")
+            taskController.deleteTaskFromServer(task) { (error) in
+                guard error == nil else {
+                    print("Error deleting task from server: \(error!)")
+                    return
+                }
+                
+                let moc = CoreDataStack.shared.mainContext
+                moc.delete(task)
+                
+                do {
+                    try moc.save()
+                } catch {
+                    moc.reset()
+                    print("Error saving deleted task: \(error)")
+                }
             }
-            //tableView.reloadData()
         }
     }
 
@@ -96,10 +95,17 @@ class TasksTableViewController: UITableViewController {
         if segue.identifier == "ShowTaskDetailSegue" {
             guard let detailVC = segue.destination as? TaskDetailViewController else { return }
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
+            
             detailVC.task = fetchedResultsController.object(at: indexPath)
+        }
+        
+        if let detailVC = segue.destination as? TaskDetailViewController {
+            detailVC.taskController = taskController
         }
     }
 }
+
+// MARK: - FRC Delegate Methods
 
 extension TasksTableViewController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

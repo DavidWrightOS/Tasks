@@ -50,6 +50,12 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="HNk-jd-avN">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh:" destination="c1x-M0-Spm" eventType="valueChanged" id="tXW-Xl-QKJ"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bjj-N5-bwU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -121,10 +127,10 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sdj-T3-F2k" secondAttribute="trailing" constant="16" id="7GR-5a-a67"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="sdj-T3-F2k" secondAttribute="bottom" constant="16" id="JMB-HN-ESR"/>
-                            <constraint firstItem="sdj-T3-F2k" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="fH2-Ek-klf"/>
-                            <constraint firstItem="sdj-T3-F2k" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="nub-u6-zi3"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="sdj-T3-F2k" secondAttribute="bottom" constant="16" id="1Dp-Ih-Zgy"/>
+                            <constraint firstItem="sdj-T3-F2k" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="9Pb-I7-YQX"/>
+                            <constraint firstItem="sdj-T3-F2k" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="BG5-7p-B9K"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sdj-T3-F2k" secondAttribute="trailing" constant="16" id="ZJw-Yq-hnu"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

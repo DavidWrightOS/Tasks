@@ -10,9 +10,13 @@ import UIKit
 
 class TaskDetailViewController: UIViewController {
 
+    // MARK: - Properties
+
     @IBOutlet var nameTextField: UITextField!
     @IBOutlet var notesTextView: UITextView!
     @IBOutlet weak var priorityControl: UISegmentedControl!
+    
+    var taskController: TaskController!
     
     var task: Task? {
         didSet {
@@ -20,10 +24,14 @@ class TaskDetailViewController: UIViewController {
         }
     }
     
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         updateViews()
     }
+
+    // MARK: - Actions
 
     @IBAction func saveTask(_ sender: Any) {
         guard let name = nameTextField.text,
@@ -37,9 +45,11 @@ class TaskDetailViewController: UIViewController {
             task.name = name
             task.notes = notes
             task.priority = priority.rawValue
+            taskController.sendTaskToServer(task: task)
         } else {
             // Create new task
-            Task(name: name, notes: notes)
+            let task = Task(name: name, notes: notes, priority: priority)
+            taskController.sendTaskToServer(task: task)
         }
         
         do {
@@ -52,6 +62,8 @@ class TaskDetailViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - Update Views
+
     private func updateViews() {
         guard isViewLoaded else { return }
         
