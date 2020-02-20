@@ -76,16 +76,6 @@ class TasksTableViewController: UITableViewController {
                     print("Error deleting task from server: \(error!)")
                     return
                 }
-                
-                let moc = CoreDataStack.shared.mainContext
-                moc.delete(task)
-                
-                do {
-                    try moc.save()
-                } catch {
-                    moc.reset()
-                    print("Error saving deleted task: \(error)")
-                }
             }
         }
     }

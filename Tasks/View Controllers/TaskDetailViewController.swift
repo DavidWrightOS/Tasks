@@ -40,23 +40,18 @@ class TaskDetailViewController: UIViewController {
         let priorityIndex = priorityControl.selectedSegmentIndex
         let priority = TaskPriority.allPriorities[priorityIndex]
         
-        if let task = task {
-            // Editing existing task
-            task.name = name
-            task.notes = notes
-            task.priority = priority.rawValue
-            taskController.sendTaskToServer(task: task)
-        } else {
-            // Create new task
-            let task = Task(name: name, notes: notes, priority: priority)
-            taskController.sendTaskToServer(task: task)
-        }
-        
-        do {
-            let moc = CoreDataStack.shared.mainContext
-            try moc.save()
-        } catch {
-            print("Error saving task: \(error)")
+        CoreDataStack.shared.mainContext.perform {
+            if let task = self.task {
+                // Editing existing task
+                task.name = name
+                task.notes = notes
+                task.priority = priority.rawValue
+                self.taskController.sendTaskToServer(task: task)
+            } else {
+                // Create new task
+                let task = Task(name: name, notes: notes, priority: priority)
+                self.taskController.sendTaskToServer(task: task)
+            }
         }
         
         navigationController?.popViewController(animated: true)

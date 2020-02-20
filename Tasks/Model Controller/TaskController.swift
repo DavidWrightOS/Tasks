@@ -26,6 +26,8 @@ class TaskController {
         fetchTasksFromServer()
     }
     
+    // MARK: - Task Actions
+
     func fetchTasksFromServer(completion: @escaping CompletionHandler = { _ in  }) {
         let requestURL = baseURL.appendingPathExtension("json")
         
@@ -48,7 +50,7 @@ class TaskController {
             
             do {
                 let taskRepresentations = Array(try JSONDecoder().decode([String : TaskRepresentation].self, from: data).values)
-                try self.updateTasks(with: taskRepresentations)
+                self.updateTasks(with: taskRepresentations)
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -74,7 +76,7 @@ class TaskController {
             }
             representation.identifier = uuid.uuidString
             task.identifier = uuid
-            try saveToPersistentStore()
+            try CoreDataStack.shared.save(context: CoreDataStack.shared.mainContext)
             request.httpBody = try JSONEncoder().encode(representation)
         } catch {
             print("Error encoding task: \(error)")
@@ -97,11 +99,25 @@ class TaskController {
         }.resume()
     }
     
+    // A better name for this method would be "deleteTask"
     func deleteTaskFromServer(_ task: Task, completion: @escaping CompletionHandler = { _ in }) {
         guard let uuid = task.identifier else {
             completion(NSError())
             return
         }
+        
+        let context = CoreDataStack.shared.mainContext
+        
+        context.perform {
+            do {
+                context.delete(task)
+                try CoreDataStack.shared.save(context: context)
+            } catch {
+                context.reset()
+                print("Error deleting object from managed object context: \(error)")
+            }
+        }
+        
         
         let requestURL = baseURL.appendingPathComponent(uuid.uuidString).appendingPathExtension("json")
         var request = URLRequest(url: requestURL)
@@ -122,7 +138,9 @@ class TaskController {
         }.resume()
     }
     
-    private func updateTasks(with representations: [TaskRepresentation]) throws {
+    // MARK: - Private Methods
+    
+    private func updateTasks(with representations: [TaskRepresentation]) {
         let tasksWithID = representations.filter { $0.identifier != nil }
         let identifiersToFetch = tasksWithID.compactMap { UUID(uuidString: $0.identifier!) }
         let representationsByID = Dictionary(uniqueKeysWithValues: zip(identifiersToFetch, tasksWithID))
@@ -131,37 +149,38 @@ class TaskController {
         let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "identifier IN %@", identifiersToFetch)
         
-        let context = CoreDataStack.shared.mainContext
+        let context = CoreDataStack.shared.container.newBackgroundContext()
         
-        do {
-            let existingTasks = try context.fetch(fetchRequest)
-            
-            for task in existingTasks {
-                guard let id = task.identifier,
-                    let representation = representationsByID[id] else { continue }
+        context.perform {
+            do {
+                let existingTasks = try context.fetch(fetchRequest)
                 
-                self.update(task: task, with: representation)
-                tasksToCreate.removeValue(forKey: id)
+                for task in existingTasks {
+                    guard let id = task.identifier,
+                        let representation = representationsByID[id] else { continue }
+                    
+                    self.update(task: task, with: representation)
+                    tasksToCreate.removeValue(forKey: id)
+                }
+                
+                for representation in tasksToCreate.values {
+                    Task(taskRepresentation: representation, context: context)
+                }
+            } catch {
+                print("Error fetching task for UUIDs: \(error)")
             }
-            
-            for representation in tasksToCreate.values {
-                Task(taskRepresentation: representation, context: context)
-            }
-        } catch {
-            print("Error fetching task for UUIDs: \(error)")
         }
         
-        try self.saveToPersistentStore()
+        do {
+            try CoreDataStack.shared.save(context: context)
+        } catch {
+            print("Error saving task to database: \(error)")
+        }
     }
     
     private func update(task: Task, with representation: TaskRepresentation) {
         task.name = representation.name
         task.notes = representation.notes
         task.priority = representation.priority
-    }
-    
-    private func saveToPersistentStore() throws {
-        let moc = CoreDataStack.shared.mainContext
-        try moc.save()
     }
 }
